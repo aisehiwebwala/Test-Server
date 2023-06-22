@@ -92,9 +92,8 @@ router.delete("/:id", [auth, checkObjectId("id")], async (req, res) => {
 
     res.json({ msg: "Post removed" });
   } catch (err) {
-    console.error(err.message);
-
-    res.status(500).send("Server Error");
+    console.error(err);
+    res.status(500).send("Server Error for post delete");
   }
 });
 
