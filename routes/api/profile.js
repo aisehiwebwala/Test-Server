@@ -5,17 +5,13 @@ const dotenv = require("dotenv");
 dotenv.config();
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
-// bring in normalize to give us a proper url, regardless of what user entered
-// const normalize = require("normalize-url");
 const checkObjectId = require("../../middleware/checkObjectId");
 
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
 
-// @route    GET api/profile/me
-// @desc     Get current users profile
-// @access   Private
+//get complete profile
 router.get("/me", auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
@@ -33,9 +29,7 @@ router.get("/me", auth, async (req, res) => {
   }
 });
 
-// @route    POST api/profile
-// @desc     Create or update user profile
-// @access   Private
+//create or update the profile
 router.post(
   "/",
   auth,

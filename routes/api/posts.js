@@ -7,9 +7,7 @@ const Post = require("../../models/Post");
 const User = require("../../models/User");
 const checkObjectId = require("../../middleware/checkObjectId");
 
-// @route    POST api/posts
-// @desc     Create a post
-// @access   Private
+//Adding a post
 router.post(
   "/",
   auth,
@@ -40,9 +38,8 @@ router.post(
   }
 );
 
-// @route    GET api/posts
-// @desc     Get all posts
-// @access   Private
+
+//get all posts sort by date desc
 router.get("/", auth, async (req, res) => {
   try {
     const posts = await Post.find().sort({ date: -1 });
@@ -53,9 +50,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// @route    GET api/posts/:id
-// @desc     Get post by ID
-// @access   Private
+//get post by postID
 router.get("/:id", auth, checkObjectId("id"), async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -72,9 +67,7 @@ router.get("/:id", auth, checkObjectId("id"), async (req, res) => {
   }
 });
 
-// @route    DELETE api/posts/:id
-// @desc     Delete a post
-// @access   Private
+//delete post by  postID
 router.delete("/:id", [auth, checkObjectId("id")], async (req, res) => {
   try {
     const post = await Post.findById(req.params.id); //post id
@@ -97,14 +90,12 @@ router.delete("/:id", [auth, checkObjectId("id")], async (req, res) => {
   }
 });
 
-// @route    PUT api/posts/like/:id
-// @desc     Like a post
-// @access   Private
+//add like on post with postID
 router.put("/like/:id", auth, checkObjectId("id"), async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    // Check if the post has already been liked
+    // Check if the post has already been liked by the user
     if (post.likes.some((like) => like.user.toString() === req.user.id)) {
       return res.status(400).json({ msg: "Post already liked" });
     }
@@ -120,14 +111,12 @@ router.put("/like/:id", auth, checkObjectId("id"), async (req, res) => {
   }
 });
 
-// @route    PUT api/posts/unlike/:id
-// @desc     Unlike a post
-// @access   Private
+//remove like on post with postID
 router.put("/unlike/:id", auth, checkObjectId("id"), async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    // Check if the post has not yet been liked
+    // Check if the post has been liked by the user
     if (!post.likes.some((like) => like.user.toString() === req.user.id)) {
       return res.status(400).json({ msg: "Post has not yet been liked" });
     }
@@ -146,9 +135,8 @@ router.put("/unlike/:id", auth, checkObjectId("id"), async (req, res) => {
   }
 });
 
-// @route    POST api/posts/comment/:id
-// @desc     Comment on a post
-// @access   Private
+
+//Add comment on post with postID
 router.post(
   "/comment/:id",
   auth,
@@ -183,14 +171,12 @@ router.post(
   }
 );
 
-// @route    DELETE api/posts/comment/:id/:comment_id
-// @desc     Delete comment
-// @access   Private
+//delete comment from post with postID and commentID
 router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    // Pull out comment
+    // get the comment
     const comment = post.comments.find(
       (comment) => comment.id === req.params.comment_id
     );
