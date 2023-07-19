@@ -17,7 +17,7 @@ app.use("/api/profile", require("./routes/api/profile"));
 app.use("/api/posts", require("./routes/api/posts"));
 
 app.get("/", (req, res) => {
-  res.send("Hello from Server");
+  res.send("Hello Dunia!");
 });
 
 const PORT = process.env.PORT || 3000;
